@@ -14,8 +14,85 @@ datasource db {
 }
 
 
-model Talent {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  name  String?
+model Person {
+  id               Int      @id @default(autoincrement())
+  dni              String
+  dniNumber        String
+  birthday         DateTime
+  name             String
+  surname          String
+  about            String?
+  address          String?
+  cp               String?
+  email            String?
+  genero           String?
+  phone            String?
+  
+  // Relations
+  languages        Language[]
+  references       Reference[]
+  studies          Study[]
+  workExperiences WorkExperience[]
+}
+
+model Language {
+  id           Int      @id @default(autoincrement())
+  languageName String
+  spokenLevel  Int
+  readLevel    Int
+  writtenLevel Int
+
+  // Relation to Person
+  person       Person   @relation(fields: [personId], references: [id])
+  personId     Int
+}
+
+model Reference {
+  id             Int      @id @default(autoincrement())
+  referenceType String
+  referenceName String
+  referenceSurname String
+  referencePhone String
+  referenceCompany String
+
+  // Relation to Person
+  person         Person   @relation(fields: [personId], references: [id])
+  personId       Int
+}
+
+model Study {
+  id             Int      @id @default(autoincrement())
+  level          String
+  title          String
+  institute      String
+  fieldOfStudy   String
+  startStudyDate DateTime
+
+  // Relation to Person
+  person         Person   @relation(fields: [personId], references: [id])
+  personId       Int
+}
+
+model WorkExperience {
+  id           Int      @id @default(autoincrement())
+  role         String
+  company      String
+  workField    String
+  positionLevel String
+  peopleInCharge String
+
+  // Relation to Person
+  person       Person   @relation(fields: [personId], references: [id])
+  personId     Int
+}
+
+model Empresa {
+  id               Int      @id @default(autoincrement())
+  companyName      String
+  name             String
+  surname          String
+  companyEmail     String
+  companyPhone     String
+  companyWebsite   String?
+  // Otros campos según sea necesario
 }
