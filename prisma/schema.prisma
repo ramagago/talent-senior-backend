@@ -86,7 +86,7 @@ model WorkExperience {
   personId     Int
 }
 
-model Empresa {
+model Companies {
   id               Int      @id @default(autoincrement())
   companyName      String
   name             String
@@ -94,5 +94,8 @@ model Empresa {
   companyEmail     String
   companyPhone     String
   companyWebsite   String?
+  currentlyWorking Boolean?
+  howCanWeHelp     String?
+
   // Otros campos según sea necesario
 }
