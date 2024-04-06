@@ -7,7 +7,7 @@ export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
   @Post()
-  async create(@Body() companyData): Promise<any> {
+  async create(@Body() companyData: Companies): Promise<any> {
     return this.companiesService.create(companyData);
   }
 
