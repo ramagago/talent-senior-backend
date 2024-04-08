@@ -7,7 +7,7 @@ export class CompaniesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(companyData: Companies): Promise<Companies> {
-    return this.prisma.companies.create({ data: companyData });
+    return await this.prisma.companies.create({ data: companyData });
   }
 
   async findAll(): Promise<Companies[]> {

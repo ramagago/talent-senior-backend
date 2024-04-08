@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { Companies } from './companies.model'; // Asegúrate de importar el modelo de empresa
+import { Companies } from './companies.model';
 import { CompaniesService } from './companies.service';
 
 @Controller('companies')
