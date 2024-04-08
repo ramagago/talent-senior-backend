@@ -10,6 +10,5 @@ export class Companies {
   companyPhone: string;
   @IsNotEmpty()
   companyWebsite?: string;
-  currentlyWorking?: boolean;
   howCanWeHelp?: string;
 }

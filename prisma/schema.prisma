@@ -21,12 +21,14 @@ model Person {
   birthday         DateTime
   name             String
   surname          String
-  about            String?
-  address          String?
+  about            String
+  address          String
   cp               String?
-  email            String?
-  genero           String?
-  phone            String?
+  email            String
+  gender           String?
+  phone            String
+  countyPD         String?
+  cityPD           String?
   
   // Relations
   languages        Language[]
@@ -48,12 +50,13 @@ model Language {
 }
 
 model Reference {
-  id             Int      @id @default(autoincrement())
-  referenceType String
-  referenceName String
+  id               Int      @id @default(autoincrement())
+  referenceRole    String
+  referenceName    String
   referenceSurname String
-  referencePhone String
+  referencePhone   String
   referenceCompany String
+  referenceType    String
 
   // Relation to Person
   person         Person   @relation(fields: [personId], references: [id])
@@ -61,12 +64,16 @@ model Reference {
 }
 
 model Study {
-  id             Int      @id @default(autoincrement())
-  level          String
-  title          String
-  institute      String
-  fieldOfStudy   String
-  startStudyDate DateTime
+  id                 Int      @id @default(autoincrement())
+  level              String
+  title              String
+  institute          String
+  fieldOfStudy       String
+  currentlyStudying  Boolean?
+  startStudyDate     DateTime
+  endStudyDate       DateTime?
+  countyStudy        String?
+  cityStudy          String?
 
   // Relation to Person
   person         Person   @relation(fields: [personId], references: [id])
@@ -74,12 +81,18 @@ model Study {
 }
 
 model WorkExperience {
-  id           Int      @id @default(autoincrement())
-  role         String
-  company      String
-  workField    String
-  positionLevel String
-  peopleInCharge String
+  id               Int      @id @default(autoincrement())
+  role             String
+  company          String
+  workField        String
+  positionLevel    String?
+  peopleInCharge   String?
+  task             String?
+  salary           String?
+  startWorkDate    DateTime
+  currentlyWorking Boolean?
+  endWorkDate      DateTime?
+  skills           String[]
 
   // Relation to Person
   person       Person   @relation(fields: [personId], references: [id])
@@ -94,7 +107,6 @@ model Companies {
   companyEmail     String
   companyPhone     String
   companyWebsite   String?
-  currentlyWorking Boolean?
   howCanWeHelp     String?
 
   // Otros campos según sea necesario
