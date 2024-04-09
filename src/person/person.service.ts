@@ -1,22 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { Person } from './person.model';
-import { PrismaService } from 'prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class PersonService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(pepe: Person): Promise<any> {
-    console.log('pepe ', pepe);
+  async create(person: Person): Promise<any> {
     return await this.prisma.person.create({
       data: {
-        ...pepe,
+        ...person,
         references: {
-          createMany: { data: pepe.references },
+          createMany: { data: person.references },
         },
-        studies: { createMany: { data: pepe.studies } },
-        workExperiences: { createMany: { data: pepe.workExperiences } },
-        languages: { createMany: { data: pepe.languages } },
+        studies: { createMany: { data: person.studies } },
+        workExperiences: { createMany: { data: person.workExperiences } },
+        languages: { createMany: { data: person.languages } },
       },
     });
   }

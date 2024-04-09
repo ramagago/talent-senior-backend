@@ -8,15 +8,14 @@ export class PersonController {
 
   @Post()
   async create(@Body() personData: Person): Promise<any> {
-    console.log(personData);
-    const pepe = {
+    const person = {
       ...personData,
       references: personData.references,
       studies: personData.studies,
       languages: personData.languages,
       workExperiences: personData.workExperiences,
     };
-    return this.personService.create(pepe);
+    return this.personService.create(person);
   }
 
   @Get()
