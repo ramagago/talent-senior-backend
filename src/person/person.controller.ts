@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { Person } from './person.model';
 
@@ -19,7 +19,7 @@ export class PersonController {
   }
 
   @Get()
-  async findAll(): Promise<Person[]> {
-    return this.personService.findAll();
+  async findAll(@Query('gender') gender?: string): Promise<Person[]> {
+    return this.personService.findAll(gender);
   }
 }

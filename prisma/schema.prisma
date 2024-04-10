@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,101 +7,88 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model Person {
-  id               Int      @id @default(autoincrement())
-  dni              String
-  dniNumber        String
-  birthday         DateTime
-  name             String
-  surname          String
-  about            String
-  address          String
-  cp               String?
-  email            String
-  gender           String?
-  phone            String
-  countyPD         String?
-  cityPD           String?
-  
-  // Relations
-  languages        Language[]
-  references       Reference[]
-  studies          Study[]
+  id              Int              @id @default(autoincrement())
+  dni             String
+  dniNumber       String
+  birthday        DateTime
+  name            String
+  surname         String
+  about           String
+  address         String
+  cp              String?
+  email           String
+  phone           String
+  cityPD          String?
+  countyPD        String?
+  gender          String?
+  languages       Language[]
+  references      Reference[]
+  studies         Study[]
   workExperiences WorkExperience[]
 }
 
 model Language {
-  id           Int      @id @default(autoincrement())
+  id           Int    @id @default(autoincrement())
   languageName String
   spokenLevel  Int
   readLevel    Int
   writtenLevel Int
-
-  // Relation to Person
-  person       Person   @relation(fields: [personId], references: [id])
   personId     Int
+  person       Person @relation(fields: [personId], references: [id])
 }
 
 model Reference {
-  id               Int      @id @default(autoincrement())
-  referenceRole    String
+  id               Int    @id @default(autoincrement())
   referenceName    String
   referenceSurname String
   referencePhone   String
   referenceCompany String
+  personId         Int
+  referenceRole    String
   referenceType    String
-
-  // Relation to Person
-  person         Person   @relation(fields: [personId], references: [id])
-  personId       Int
+  person           Person @relation(fields: [personId], references: [id])
 }
 
 model Study {
-  id                 Int      @id @default(autoincrement())
-  level              String
-  title              String
-  institute          String
-  fieldOfStudy       String
-  currentlyStudying  Boolean?
-  startStudyDate     DateTime
-  endStudyDate       DateTime?
-  countyStudy        String?
-  cityStudy          String?
-
-  // Relation to Person
-  person         Person   @relation(fields: [personId], references: [id])
-  personId       Int
+  id                Int       @id @default(autoincrement())
+  level             String
+  title             String
+  institute         String
+  fieldOfStudy      String
+  startStudyDate    DateTime
+  personId          Int
+  currentlyStudying Boolean?
+  cityStudy         String?
+  countyStudy       String?
+  endStudyDate      DateTime?
+  person            Person    @relation(fields: [personId], references: [id])
 }
 
 model WorkExperience {
-  id               Int      @id @default(autoincrement())
+  id               Int       @id @default(autoincrement())
   role             String
   company          String
   workField        String
   positionLevel    String?
   peopleInCharge   String?
-  task             String?
-  salary           String?
-  startWorkDate    DateTime
+  personId         Int
   currentlyWorking Boolean?
   endWorkDate      DateTime?
+  salary           String?
   skills           String[]
-
-  // Relation to Person
-  person       Person   @relation(fields: [personId], references: [id])
-  personId     Int
+  startWorkDate    DateTime
+  task             String?
+  person           Person    @relation(fields: [personId], references: [id])
 }
 
 model Companies {
-  id               Int      @id @default(autoincrement())
-  companyName      String
-  name             String
-  surname          String
-  companyEmail     String
-  companyPhone     String
-  companyWebsite   String?
-  howCanWeHelp     String?
-
-  // Otros campos según sea necesario
+  id             Int     @id @default(autoincrement())
+  companyName    String
+  name           String
+  surname        String
+  companyEmail   String
+  companyPhone   String
+  companyWebsite String?
+  howCanWeHelp   String?
 }
