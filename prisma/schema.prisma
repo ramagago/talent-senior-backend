@@ -22,6 +22,9 @@ model Person {
   cityPD          String?
   countyPD        String?
   gender          String?
+  liveAbroad      Boolean?
+  currentCountry  String?
+  currentCity     String?
   languages       Language[]
   references      Reference[]
   studies         Study[]
