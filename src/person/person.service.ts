@@ -20,7 +20,7 @@ export class PersonService {
     });
   }
 
-  async findAll(gender?: string): Promise<Person[]> {
+  async findAll({ filter, sort }): Promise<Person[]> {
     // Define un objeto para almacenar los criterios de búsqueda
     const searchCriteria: any = {};
 
