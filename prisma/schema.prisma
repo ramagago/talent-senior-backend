@@ -1,5 +1,7 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+  output = "./node_modules/@prisma/client"
 }
 
 datasource db {
@@ -46,9 +48,9 @@ model Reference {
   referenceName    String
   referenceSurname String
   referencePhone   String
-  referenceCompany String
+  referenceCompany String?
   personId         Int
-  referenceRole    String
+  referenceRole    String?
   referenceType    String
   person           Person @relation(fields: [personId], references: [id])
 }
@@ -62,6 +64,7 @@ model Study {
   startStudyDate    DateTime
   personId          Int
   currentlyStudying Boolean?
+  studySitutation   String?
   cityStudy         String?
   countyStudy       String?
   endStudyDate      DateTime?
@@ -86,12 +89,13 @@ model WorkExperience {
 }
 
 model Companies {
-  id             Int     @id @default(autoincrement())
-  companyName    String
-  name           String
-  surname        String
-  companyEmail   String
-  companyPhone   String
-  companyWebsite String?
-  howCanWeHelp   String?
+  id                 Int     @id @default(autoincrement())
+  companyName        String
+  name               String
+  surname            String
+  companyEmail       String
+  companyPhone       String
+  companyWebsite     String?
+  howCanWeHelp       String?
+  termsAndConditions Boolean
 }

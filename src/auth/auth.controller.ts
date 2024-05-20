@@ -1,33 +1,14 @@
-import {
-  Controller,
-  Post,
-  Body,
-  HttpException,
-  HttpStatus,
-  Res,
-} from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { ApiKeyGuard } from './auth.apiKey.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('login')
-  async login(
-    @Body('username') username: string,
-    @Body('password') password: string,
-    @Res() res: Response,
-  ) {
-    try {
-      const token = await this.authService.login(username, password);
-      res.setHeader('Authorization', `Bearer ${token}`);
-      res.status(HttpStatus.OK).send();
-    } catch (error) {
-      throw new HttpException(
-        'Credenciales incorrectas',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
+  @UseGuards(ApiKeyGuard)
+  @Post('check-api-key')
+  async check() {
+    return 'ok';
   }
 }
