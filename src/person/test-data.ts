@@ -9,6 +9,9 @@ export const validPersonData = {
   dniNumber: '44944137',
   gender: 'masculino',
   cityPD: 'PUNTA DEL ESTE',
+  liveAbroad: false,
+  currentCountry: undefined,
+  currentCity: undefined,
   about: 'Soy programador',
   references: [
     {

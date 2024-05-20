@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail } from 'class-validator';
 
 export class Companies {
   id: number;
@@ -8,7 +8,7 @@ export class Companies {
   @IsEmail()
   companyEmail: string;
   companyPhone: string;
-  @IsNotEmpty()
   companyWebsite?: string;
   howCanWeHelp?: string;
+  termsAndConditions: boolean;
 }

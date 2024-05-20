@@ -1,5 +1,3 @@
-// import { IsEmail, IsNotEmpty } from 'class-validator';
-
 export class Person {
   id: number;
   dni: string;
@@ -15,6 +13,9 @@ export class Person {
   phone: string;
   countyPD?: string;
   cityPD?: string;
+  liveAbroad?: boolean;
+  currentCountry?: string;
+  currentCity?: string;
 
   languages: LanguageModel[];
   references: ReferenceModel[];
