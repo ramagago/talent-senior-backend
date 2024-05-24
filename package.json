@@ -32,9 +32,7 @@
     "jsonwebtoken": "9.0.2",
     "reflect-metadata": "0.1.13",
     "rxjs": "7.8.1",
-    "safe-compare": "1.1.4"
-  },
-  "devDependencies": {
+    "safe-compare": "1.1.4",
     "@nestjs/cli": "10.0.0",
     "@nestjs/schematics": "10.0.0",
     "@nestjs/testing": "10.0.0",
