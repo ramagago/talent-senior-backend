@@ -30,7 +30,14 @@ export class PersonController {
     @Query('sortOrder', ToLowerCase) sortOrder: 'asc' | 'desc',
     @Query('page') page: string = '1',
     @Query('perPage') perPage: string = '10',
-    @Query('filter') filter: string = '',
+    @Query('positionLevel') positionLevel: string = '',
+    @Query('levelOfStudy') levelOfStudy: string = '',
+    @Query('gender') gender: string = '',
+    @Query('languageName') languageName: string = '',
+    @Query('countyPD') countyPD: string = '',
+    @Query('workField') workField: string = '',
+    @Query('ageMin') ageMin: number,
+    @Query('ageMax') ageMax: number,
   ): Promise<{ data: Person[]; total: number }> {
     // const sortOrderLow: string = sortOrder.toLowerCase();
     return this.personService.findAll({
@@ -39,7 +46,14 @@ export class PersonController {
       sortOrder,
       page: parseInt(page),
       perPage: parseInt(perPage),
-      filter,
+      positionLevel,
+      levelOfStudy,
+      gender,
+      languageName,
+      countyPD,
+      workField,
+      ageMin,
+      ageMax,
     });
   }
 
