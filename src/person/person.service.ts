@@ -64,6 +64,28 @@ export class PersonService {
   }: FindAllAParams): Promise<{ data: Person[]; total: number }> {
     const skip = (page - 1) * perPage;
     const AND = [];
+    const countiesToExclude = [
+      'MONTEVIDEO',
+      'CANELONES',
+      'MALDONADO',
+      'ROCHA',
+      'ARTIGAS',
+      'SALTO',
+      'PAYSANDU',
+      'RIVERA',
+      'RIO NEGRO',
+      'TACUAREMBO',
+      'TREINTA Y TRES',
+      'LAVALLEJA',
+      'CERRO LARGO',
+      'FLORIDA',
+      'FLORES',
+      'DURAZNO',
+      'COLONIA',
+      'SAN JOSE',
+      'SORIANO',
+    ];
+
     if (search)
       AND.push({
         OR: [
@@ -109,34 +131,37 @@ export class PersonService {
       AND.push({
         gender: { equals: gender },
       });
+
     if (countyPD && isArray(countyPD)) {
-      AND.push({
-        countyPD: { in: countyPD },
-      });
+      if (countyPD.find((item) => item === 'liveAbroad'))
+        AND.push({
+          OR: [
+            { countyPD: { in: countyPD } },
+            { countyPD: { notIn: countiesToExclude } },
+          ],
+        });
+      else {
+        AND.push({ countyPD: { in: countyPD } });
+      }
     } else if (countyPD)
-      AND.push({
-        countyPD: { equals: countyPD },
-      });
-    if (languageName && isArray(languageName)) {
-      AND.push({
-        languages: { some: { languageName: { in: languageName } } },
-      });
-    } else if (languageName)
-      AND.push({
-        languages: { some: { languageName: { equals: languageName } } },
-      });
+      if (countyPD === 'liveAbroad') {
+        AND.push({ countyPD: { notIn: countiesToExclude } });
+      } else if (
+        AND.push({
+          countyPD: { equals: countyPD },
+        })
+      )
+        if (languageName && isArray(languageName)) {
+          AND.push({
+            languages: { some: { languageName: { in: languageName } } },
+          });
+        } else if (languageName)
+          AND.push({
+            languages: { some: { languageName: { equals: languageName } } },
+          });
 
     if (skills) {
       AND.push({ skills: { equals: skills } });
-    }
-    const currentDate = new Date();
-    if (ageMin !== undefined) {
-      const minDate = new Date(
-        currentDate.setFullYear(currentDate.getFullYear() - ageMin),
-      );
-      AND.push({
-        birthday: { lte: minDate },
-      });
     }
 
     if (ageMin !== undefined) {
