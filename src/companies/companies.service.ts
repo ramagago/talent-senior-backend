@@ -22,7 +22,6 @@ export class CompaniesService {
     page,
     perPage,
   }: FindAllAParams): Promise<{ companies: Companies[]; total: number }> {
-    console.log(search, page, perPage);
     const skip = (page - 1) * perPage;
     const companiesPromise = this.prisma.companies.findMany({
       where: {
@@ -52,8 +51,6 @@ export class CompaniesService {
         companiesPromise,
         countPromise,
       ]);
-      // console.log('Resolved companies data:', companiesData);
-      // console.log('Resolved count:', totalCount);
       return { companies: companiesData, total: totalCount };
     } catch (err) {
       this.logger.error(`Error in transaction: ${err.message}`);

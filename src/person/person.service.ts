@@ -9,9 +9,16 @@ interface FindAllAParams {
   sortOrder: string;
   page: number;
   perPage: number;
-  filter: string;
+  positionLevel: string;
+  levelOfStudy?: string;
+  languageName?: string;
+  gender?: string;
   cityPD?: string;
   skills?: string;
+  countyPD?: string;
+  workField?: string;
+  ageMin?: number;
+  ageMax?: number;
 }
 
 @Injectable()
@@ -45,11 +52,17 @@ export class PersonService {
     sortOrder,
     page,
     perPage,
-    cityPD,
     skills,
+    positionLevel,
+    levelOfStudy,
+    gender,
+    languageName,
+    countyPD,
+    workField,
+    ageMin,
+    ageMax,
   }: FindAllAParams): Promise<{ data: Person[]; total: number }> {
     const skip = (page - 1) * perPage;
-    console.log([sortField]);
     const AND = [];
     if (search)
       AND.push({
@@ -64,14 +77,82 @@ export class PersonService {
         ],
       });
 
-    if (cityPD && isArray(cityPD)) {
-      AND.push({ cityPD: { in: cityPD } });
-    } else if (cityPD) {
-      AND.push({ cityPD: { equals: cityPD } });
-    }
+    if (positionLevel && isArray(positionLevel)) {
+      AND.push({
+        workExperiences: { some: { positionLevel: { in: positionLevel } } },
+      });
+    } else if (positionLevel)
+      AND.push({
+        workExperiences: { some: { positionLevel: { equals: positionLevel } } },
+      });
+    if (workField && isArray(workField)) {
+      AND.push({
+        workExperiences: { some: { workField: { in: workField } } },
+      });
+    } else if (workField)
+      AND.push({
+        workExperiences: { some: { workField: { equals: workField } } },
+      });
+    if (levelOfStudy && isArray(levelOfStudy)) {
+      AND.push({
+        studies: { some: { levelOfStudy: { in: levelOfStudy } } },
+      });
+    } else if (levelOfStudy)
+      AND.push({
+        studies: { some: { levelOfStudy: { equals: levelOfStudy } } },
+      });
+    if (gender && isArray(gender)) {
+      AND.push({
+        gender: { in: gender },
+      });
+    } else if (gender)
+      AND.push({
+        gender: { equals: gender },
+      });
+    if (countyPD && isArray(countyPD)) {
+      AND.push({
+        countyPD: { in: countyPD },
+      });
+    } else if (countyPD)
+      AND.push({
+        countyPD: { equals: countyPD },
+      });
+    if (languageName && isArray(languageName)) {
+      AND.push({
+        languages: { some: { languageName: { in: languageName } } },
+      });
+    } else if (languageName)
+      AND.push({
+        languages: { some: { languageName: { equals: languageName } } },
+      });
 
     if (skills) {
       AND.push({ skills: { equals: skills } });
+    }
+    const currentDate = new Date();
+    if (ageMin !== undefined) {
+      const minDate = new Date(
+        currentDate.setFullYear(currentDate.getFullYear() - ageMin),
+      );
+      AND.push({
+        birthday: { lte: minDate },
+      });
+    }
+
+    if (ageMin !== undefined) {
+      const minDate = new Date();
+      minDate.setFullYear(minDate.getFullYear() - ageMin);
+      AND.push({
+        birthday: { lte: minDate },
+      });
+    }
+
+    if (ageMax !== undefined) {
+      const maxDate = new Date();
+      maxDate.setFullYear(maxDate.getFullYear() - ageMax);
+      AND.push({
+        birthday: { gte: maxDate },
+      });
     }
 
     const findMany = this.prisma.person.findMany({

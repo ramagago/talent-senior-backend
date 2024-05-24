@@ -1,12 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `Persona` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropTable
-DROP TABLE "Persona";
-
 -- CreateTable
 CREATE TABLE "Person" (
     "id" SERIAL NOT NULL,
@@ -15,12 +6,17 @@ CREATE TABLE "Person" (
     "birthday" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
     "surname" TEXT NOT NULL,
-    "about" TEXT,
-    "address" TEXT,
+    "about" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
     "cp" TEXT,
-    "email" TEXT,
-    "genero" TEXT,
-    "phone" TEXT,
+    "email" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
+    "cityPD" TEXT,
+    "countyPD" TEXT,
+    "gender" TEXT,
+    "currentCity" TEXT,
+    "currentCountry" TEXT,
+    "liveAbroad" BOOLEAN,
 
     CONSTRAINT "Person_pkey" PRIMARY KEY ("id")
 );
@@ -40,12 +36,13 @@ CREATE TABLE "Language" (
 -- CreateTable
 CREATE TABLE "Reference" (
     "id" SERIAL NOT NULL,
-    "referenceType" TEXT NOT NULL,
     "referenceName" TEXT NOT NULL,
     "referenceSurname" TEXT NOT NULL,
     "referencePhone" TEXT NOT NULL,
-    "referenceCompany" TEXT NOT NULL,
+    "referenceCompany" TEXT,
     "personId" INTEGER NOT NULL,
+    "referenceRole" TEXT,
+    "referenceType" TEXT NOT NULL,
 
     CONSTRAINT "Reference_pkey" PRIMARY KEY ("id")
 );
@@ -53,12 +50,17 @@ CREATE TABLE "Reference" (
 -- CreateTable
 CREATE TABLE "Study" (
     "id" SERIAL NOT NULL,
-    "level" TEXT NOT NULL,
+    "levelOfStudy" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "institute" TEXT NOT NULL,
     "fieldOfStudy" TEXT NOT NULL,
     "startStudyDate" TIMESTAMP(3) NOT NULL,
     "personId" INTEGER NOT NULL,
+    "currentlyStudying" BOOLEAN,
+    "cityStudy" TEXT,
+    "countyStudy" TEXT,
+    "endStudyDate" TIMESTAMP(3),
+    "studySitutation" TEXT,
 
     CONSTRAINT "Study_pkey" PRIMARY KEY ("id")
 );
@@ -69,15 +71,21 @@ CREATE TABLE "WorkExperience" (
     "role" TEXT NOT NULL,
     "company" TEXT NOT NULL,
     "workField" TEXT NOT NULL,
-    "positionLevel" TEXT NOT NULL,
-    "peopleInCharge" TEXT NOT NULL,
+    "positionLevel" TEXT,
+    "peopleInCharge" TEXT,
     "personId" INTEGER NOT NULL,
+    "currentlyWorking" BOOLEAN,
+    "endWorkDate" TIMESTAMP(3),
+    "salary" TEXT,
+    "skills" TEXT[],
+    "startWorkDate" TIMESTAMP(3) NOT NULL,
+    "task" TEXT,
 
     CONSTRAINT "WorkExperience_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Empresa" (
+CREATE TABLE "Companies" (
     "id" SERIAL NOT NULL,
     "companyName" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -85,8 +93,10 @@ CREATE TABLE "Empresa" (
     "companyEmail" TEXT NOT NULL,
     "companyPhone" TEXT NOT NULL,
     "companyWebsite" TEXT,
+    "howCanWeHelp" TEXT,
+    "termsAndConditions" BOOLEAN NOT NULL,
 
-    CONSTRAINT "Empresa_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Companies_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey

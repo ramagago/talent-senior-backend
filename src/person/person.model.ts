@@ -43,7 +43,7 @@ export class ReferenceModel {
 
 export class StudyModel {
   id: number;
-  level: string;
+  levelOfStudy: string;
   title: string;
   institute: string;
   fieldOfStudy: string;

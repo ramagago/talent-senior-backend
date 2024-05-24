@@ -1,0 +1,1 @@
+ALTER DATABASE talent_senior SET client_encoding TO 'UTF8';

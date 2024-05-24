@@ -15,6 +15,10 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
+  // app.use((req, res, next) => {
+  //   res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  //   next();
+  // });
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
 }
