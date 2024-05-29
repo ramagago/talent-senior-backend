@@ -12,7 +12,9 @@ async function bootstrap() {
       'http://localhost:5174',
       'http://localhost:3005',
       'https://talentosenior.uy',
-      'https://www.talentosenior.uy'
+      'https://www.talentosenior.uy',
+      'https://main--talentosenioradmin.netlify.app',
+      'main--talentosenioradmin.netlify.app',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
