@@ -15,6 +15,7 @@ async function bootstrap() {
       'https://www.talentosenior.uy',
       'https://main--talentosenioradmin.netlify.app',
       'main--talentosenioradmin.netlify.app',
+      'https://talentsenioruy.netlify.app',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
