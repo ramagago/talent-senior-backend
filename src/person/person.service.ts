@@ -240,9 +240,13 @@ export class PersonService {
   }
   async delete(id: number): Promise<void> {
     try {
-      await this.prisma.person.delete({
-        where: { id },
-      });
+      await this.prisma.$transaction([
+        this.prisma.reference.deleteMany({ where: { personId: id } }),
+        this.prisma.study.deleteMany({ where: { personId: id } }),
+        this.prisma.workExperience.deleteMany({ where: { personId: id } }),
+        this.prisma.language.deleteMany({ where: { personId: id } }),
+        this.prisma.person.delete({ where: { id } }),
+      ]);
     } catch (error) {
       this.logger.error(`Error deleting person: ${error.message}`);
       throw new HttpException(
@@ -254,11 +258,15 @@ export class PersonService {
 
   async deleteMany(ids: number[]): Promise<void> {
     try {
-      await this.prisma.person.deleteMany({
-        where: {
-          id: { in: ids },
-        },
-      });
+      await this.prisma.$transaction([
+        this.prisma.reference.deleteMany({ where: { personId: { in: ids } } }),
+        this.prisma.study.deleteMany({ where: { personId: { in: ids } } }),
+        this.prisma.workExperience.deleteMany({
+          where: { personId: { in: ids } },
+        }),
+        this.prisma.language.deleteMany({ where: { personId: { in: ids } } }),
+        this.prisma.person.deleteMany({ where: { id: { in: ids } } }),
+      ]);
     } catch (error) {
       this.logger.error(`Error deleting many persons: ${error.message}`);
       throw new HttpException(
