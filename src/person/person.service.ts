@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { Person } from './person.model';
 import { PrismaService } from '../../prisma/prisma.service';
 import { isArray } from 'class-validator';
@@ -236,6 +236,35 @@ export class PersonService {
     } catch (error) {
       this.logger.error(`Error finding person by id: ${error.message}`);
       throw error;
+    }
+  }
+  async delete(id: number): Promise<void> {
+    try {
+      await this.prisma.person.delete({
+        where: { id },
+      });
+    } catch (error) {
+      this.logger.error(`Error deleting person: ${error.message}`);
+      throw new HttpException(
+        'Error deleting person',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async deleteMany(ids: number[]): Promise<void> {
+    try {
+      await this.prisma.person.deleteMany({
+        where: {
+          id: { in: ids },
+        },
+      });
+    } catch (error) {
+      this.logger.error(`Error deleting many persons: ${error.message}`);
+      throw new HttpException(
+        'Error deleting many persons',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

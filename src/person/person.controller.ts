@@ -3,6 +3,7 @@ import {
   Controller,
   Post,
   Get,
+  Delete,
   Query,
   Param,
   ParseIntPipe,
@@ -61,5 +62,21 @@ export class PersonController {
   @Get(':id')
   async getById(@Param('id', ParseIntPipe) id: number): Promise<Person | null> {
     return this.personService.getById(id);
+  }
+
+  @UseGuards(ApiKeyGuard)
+  @Delete(':id')
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<{ success: boolean }> {
+    await this.personService.delete(id);
+    return { success: true };
+  }
+
+  @UseGuards(ApiKeyGuard)
+  @Delete()
+  async deleteMany(@Body() ids: number[]): Promise<{ success: boolean }> {
+    await this.personService.deleteMany(ids);
+    return { success: true };
   }
 }
