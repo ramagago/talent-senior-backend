@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { CompaniesModule } from './companies/companies.module';
 import { PersonModule } from './person/person.module';
 import { AuthModule } from './auth/auth.module';
+import { CommunicationModule } from './communication/communication.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AuthModule } from './auth/auth.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    CommunicationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
