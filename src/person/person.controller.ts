@@ -13,14 +13,33 @@ import { PersonService } from './person.service';
 import { Person } from './person.model';
 import { ApiKeyGuard } from 'src/auth/auth.apiKey.guard';
 import { ToLowerCase } from './pipes/ToLowerCase.pipe';
+import { CommunicationService } from 'src/communication/communication.service';
 
 @Controller('person')
 export class PersonController {
-  constructor(private readonly personService: PersonService) {}
+  constructor(
+    private readonly personService: PersonService,
+    private readonly communicationService: CommunicationService,
+  ) {}
 
   @Post()
   async create(@Body() personData: Person): Promise<any> {
-    return this.personService.create(personData);
+    const person = await this.personService.create(personData);
+    this.communicationService.sendEmail(
+      person.email,
+      person.name,
+      person.surname,
+    );
+
+    return person;
+  }
+  @Post('email')
+  async coso(): Promise<any> {
+    this.communicationService.sendEmail(
+      'helloramagago@gmail.com',
+      'peter',
+      'zunino',
+    );
   }
 
   // @UseGuards(ApiKeyGuard)

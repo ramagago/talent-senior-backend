@@ -6,6 +6,7 @@ import { CompaniesModule } from './companies/companies.module';
 import { PersonModule } from './person/person.module';
 import { AuthModule } from './auth/auth.module';
 import { CommunicationModule } from './communication/communication.module';
+import { MailerModule } from './mailer/mailer.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CommunicationModule } from './communication/communication.module';
       isGlobal: true,
     }),
     CommunicationModule,
+    MailerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

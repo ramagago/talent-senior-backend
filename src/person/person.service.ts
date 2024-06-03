@@ -1,7 +1,6 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { Person } from './person.model';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CommunicationService } from 'src/communication/communication.service';
 import { isArray } from 'class-validator';
 
 interface FindAllAParams {
@@ -26,14 +25,11 @@ interface FindAllAParams {
 export class PersonService {
   private readonly logger = new Logger(PersonService.name);
 
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly communicationService: CommunicationService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(person: Person): Promise<any> {
     try {
-      await this.prisma.person.create({
+      return this.prisma.person.create({
         data: {
           ...person,
           references: {
@@ -44,11 +40,6 @@ export class PersonService {
           languages: { createMany: { data: person.languages } },
         },
       });
-      this.communicationService.sendEmail(
-        person.name,
-        person.surname,
-        person.email,
-      );
     } catch (error) {
       this.logger.error(`Error creating person: ${error.message}`);
       throw error;
