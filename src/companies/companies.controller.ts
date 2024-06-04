@@ -7,6 +7,7 @@ import {
   Post,
   Query,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { Companies } from './companies.model';
 import { CompaniesService } from './companies.service';
@@ -41,5 +42,16 @@ export class CompaniesController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Companies | null> {
     return this.companiesService.getById(id);
+  }
+  @UseGuards(ApiKeyGuard)
+  @Delete(':id')
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    await this.companiesService.delete(id);
+  }
+
+  @UseGuards(ApiKeyGuard)
+  @Delete()
+  async deleteMany(@Body('ids') ids: number[]): Promise<void> {
+    await this.companiesService.deleteMany(ids);
   }
 }

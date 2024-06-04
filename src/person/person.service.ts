@@ -91,9 +91,29 @@ export class PersonService {
         OR: [
           { name: { contains: search, mode: 'insensitive' } },
           { surname: { contains: search, mode: 'insensitive' } },
+          { dniNumber: { contains: search, mode: 'insensitive' } },
+          { email: { contains: search, mode: 'insensitive' } },
+          { phone: { contains: search, mode: 'insensitive' } },
           {
             studies: {
-              some: { title: { contains: search, mode: 'insensitive' } },
+              some: {
+                OR: [
+                  { title: { contains: search, mode: 'insensitive' } },
+                  { institute: { contains: search, mode: 'insensitive' } },
+                ],
+              },
+            },
+          },
+          {
+            workExperiences: {
+              some: {
+                OR: [
+                  { company: { contains: search, mode: 'insensitive' } },
+                  { role: { contains: search, mode: 'insensitive' } },
+                  { workField: { contains: search, mode: 'insensitive' } },
+                  { skills: { contains: search, mode: 'insensitive' } },
+                ],
+              },
             },
           },
         ],
@@ -107,6 +127,7 @@ export class PersonService {
       AND.push({
         workExperiences: { some: { positionLevel: { equals: positionLevel } } },
       });
+
     if (workField && isArray(workField)) {
       AND.push({
         workExperiences: { some: { workField: { in: workField } } },
@@ -115,6 +136,7 @@ export class PersonService {
       AND.push({
         workExperiences: { some: { workField: { equals: workField } } },
       });
+
     if (levelOfStudy && isArray(levelOfStudy)) {
       AND.push({
         studies: { some: { levelOfStudy: { in: levelOfStudy } } },
@@ -123,6 +145,7 @@ export class PersonService {
       AND.push({
         studies: { some: { levelOfStudy: { equals: levelOfStudy } } },
       });
+
     if (gender && isArray(gender)) {
       AND.push({
         gender: { in: gender },
@@ -146,19 +169,18 @@ export class PersonService {
     } else if (countyPD)
       if (countyPD === 'liveAbroad') {
         AND.push({ countyPD: { notIn: countiesToExclude } });
-      } else if (
+      } else
         AND.push({
           countyPD: { equals: countyPD },
-        })
-      )
-        if (languageName && isArray(languageName)) {
-          AND.push({
-            languages: { some: { languageName: { in: languageName } } },
-          });
-        } else if (languageName)
-          AND.push({
-            languages: { some: { languageName: { equals: languageName } } },
-          });
+        });
+    if (languageName && isArray(languageName)) {
+      AND.push({
+        languages: { some: { languageName: { in: languageName } } },
+      });
+    } else if (languageName)
+      AND.push({
+        languages: { some: { languageName: { equals: languageName } } },
+      });
 
     if (skills) {
       AND.push({ skills: { equals: skills } });
@@ -199,15 +221,7 @@ export class PersonService {
     });
     const count = this.prisma.person.count({
       where: {
-        OR: [
-          { name: { contains: search, mode: 'insensitive' } },
-          { surname: { contains: search, mode: 'insensitive' } },
-          {
-            studies: {
-              some: { title: { contains: search, mode: 'insensitive' } },
-            },
-          },
-        ],
+        AND,
       },
     });
     try {

@@ -13,34 +13,44 @@ import { PersonService } from './person.service';
 import { Person } from './person.model';
 import { ApiKeyGuard } from 'src/auth/auth.apiKey.guard';
 import { ToLowerCase } from './pipes/ToLowerCase.pipe';
-import { CommunicationService } from 'src/communication/communication.service';
+import { MailerService } from 'src/mailer/mailer.service';
+import { SendEmailDto } from 'src/mailer/mailer.interface';
 
 @Controller('person')
 export class PersonController {
   constructor(
     private readonly personService: PersonService,
-    private readonly communicationService: CommunicationService,
+    private readonly mailerService: MailerService,
   ) {}
 
   @Post()
   async create(@Body() personData: Person): Promise<any> {
     const person = await this.personService.create(personData);
-    this.communicationService.sendEmail(
-      person.email,
-      person.name,
-      person.surname,
-    );
+    const dto: SendEmailDto = {
+      from: {
+        name: 'Equipo Talento Senior',
+        address: 'helloramagago@gmail.com',
+      },
+      recipients: [
+        { name: person.name + ' ' + person.surname, address: person.email },
+      ],
+      subject: 'Lucky Number',
+      html: `<p>Hola <strong>${
+        person.name + ' ' + person.surname
+      }</strong> You won $1,000,000 !!!</p>`,
+    };
+    this.mailerService.sendEmail(dto);
 
     return person;
   }
-  @Post('email')
-  async coso(): Promise<any> {
-    this.communicationService.sendEmail(
-      'helloramagago@gmail.com',
-      'peter',
-      'zunino',
-    );
-  }
+  // @Post('email')
+  // async coso(): Promise<any> {
+  //   this.communicationService.sendEmail(
+  //     'helloramagago@gmail.com',
+  //     'peter',
+  //     'zunino',
+  //   );
+  // }
 
   // @UseGuards(ApiKeyGuard)
   @Get()

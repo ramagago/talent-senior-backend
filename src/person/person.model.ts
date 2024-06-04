@@ -1,15 +1,28 @@
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+
 export class Person {
   id: number;
+  @IsNotEmpty()
   dni: string;
+  @IsNotEmpty()
   dniNumber: string;
   birthday: Date;
+  @IsString()
+  @IsNotEmpty()
   name: string;
+  @IsString()
+  @IsNotEmpty()
   surname: string;
+  @IsString()
+  @IsNotEmpty()
   about: string;
   address: string;
   cp?: string;
+  @IsEmail()
+  @IsNotEmpty()
   email: string;
   gender?: string;
+  @IsNotEmpty()
   phone: string;
   countyPD?: string;
   cityPD?: string;
@@ -43,9 +56,17 @@ export class ReferenceModel {
 
 export class StudyModel {
   id: number;
+  @IsNotEmpty()
+  @IsString()
   levelOfStudy: string;
+  @IsNotEmpty()
+  @IsString()
   title: string;
+  @IsNotEmpty()
+  @IsString()
   institute: string;
+  @IsNotEmpty()
+  @IsString()
   fieldOfStudy: string;
   currentlyStudying?: boolean;
   startStudyDate: Date;
@@ -56,8 +77,11 @@ export class StudyModel {
 
 export class WorkExperienceModel {
   id: number;
+  @IsNotEmpty()
   role: string;
+  @IsNotEmpty()
   company: string;
+  @IsNotEmpty()
   workField: string;
   positionLevel?: string;
   peopleInCharge?: string;

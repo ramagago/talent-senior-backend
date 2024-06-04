@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Companies } from './companies.model';
 
@@ -41,6 +41,11 @@ export class CompaniesService {
           ? [
               { companyName: { contains: search, mode: 'insensitive' } },
               { howCanWeHelp: { contains: search, mode: 'insensitive' } },
+              { name: { contains: search, mode: 'insensitive' } },
+              { surname: { contains: search, mode: 'insensitive' } },
+              { companyEmail: { contains: search, mode: 'insensitive' } },
+              { companyWebsite: { contains: search, mode: 'insensitive' } },
+              { companyPhone: { contains: search, mode: 'insensitive' } },
             ]
           : undefined,
       },
@@ -66,6 +71,29 @@ export class CompaniesService {
     } catch (error) {
       this.logger.error(`Error finding person by id: ${error.message}`);
       throw error;
+    }
+  }
+  async delete(id: number): Promise<void> {
+    try {
+      await this.prisma.companies.delete({ where: { id } });
+    } catch (error) {
+      this.logger.error(`Error deleting company: ${error.message}`);
+      throw new HttpException(
+        'Error deleting company',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async deleteMany(ids: number[]): Promise<void> {
+    try {
+      await this.prisma.companies.deleteMany({ where: { id: { in: ids } } });
+    } catch (error) {
+      this.logger.error(`Error deleting many companies: ${error.message}`);
+      throw new HttpException(
+        'Error deleting many companies',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }
