@@ -12,14 +12,37 @@ import {
 import { Companies } from './companies.model';
 import { CompaniesService } from './companies.service';
 import { ApiKeyGuard } from 'src/auth/auth.apiKey.guard';
+import { MailerService } from 'src/mailer/mailer.service';
+import { SendEmailDto } from 'src/mailer/mailer.interface';
 
 @Controller('companies')
 export class CompaniesController {
-  constructor(private readonly companiesService: CompaniesService) {}
+  constructor(
+    private readonly companiesService: CompaniesService,
+    private readonly mailerService: MailerService,
+  ) {}
 
   @Post()
   async create(@Body() companyData: Companies): Promise<any> {
-    return this.companiesService.create(companyData);
+    const company = await this.companiesService.create(companyData);
+    const dto: SendEmailDto = {
+      from: {
+        name: 'Talento Senior',
+        address: 'info@talentosenior.uy',
+      },
+      recipients: [
+        {
+          name: company.name + ' ' + company.surname,
+          address: company.companyEmail,
+        },
+      ],
+      subject: 'Registro Exitoso',
+      html: `<p>Hola <strong>${
+        company.name + ' ' + company.surname
+      }</strong> su registro se ha realizado con éxito. <br><br> Muchas gracias.</p>`,
+    };
+    this.mailerService.sendEmail(dto);
+    return company;
   }
 
   @Get()

@@ -28,16 +28,16 @@ export class PersonController {
     const person = await this.personService.create(personData);
     const dto: SendEmailDto = {
       from: {
-        name: 'Equipo Talento Senior',
-        address: 'helloramagago@gmail.com',
+        name: 'Talento Senior',
+        address: 'info@talentosenior.uy',
       },
       recipients: [
         { name: person.name + ' ' + person.surname, address: person.email },
       ],
-      subject: 'Lucky Number',
+      subject: 'Registro Exitoso',
       html: `<p>Hola <strong>${
         person.name + ' ' + person.surname
-      }</strong> You won $1,000,000 !!!</p>`,
+      }</strong> su registro se ha realizado con éxito. <br><br> Muchas gracias.</p>`,
     };
     this.mailerService.sendEmail(dto);
 
