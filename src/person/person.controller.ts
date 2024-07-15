@@ -26,7 +26,7 @@ export class PersonController {
   @Post()
   async create(@Body() personData: Person): Promise<any> {
     const person = await this.personService.create(personData);
-    const dto: SendEmailDto = {
+    const dto1: SendEmailDto = {
       from: {
         name: 'Talento Senior',
         address: 'info@talentosenior.uy',
@@ -39,20 +39,29 @@ export class PersonController {
         person.name + ' ' + person.surname
       }</strong> su registro se ha realizado con éxito. <br><br> Muchas gracias.</p>`,
     };
-    this.mailerService.sendEmail(dto);
+    this.mailerService.sendEmail(dto1);
+    const dto2: SendEmailDto = {
+      from: {
+        name: 'Talento Senior',
+        address: 'info@talentosenior.uy',
+      },
+      recipients: [
+        {
+          name: person.name + ' ' + person.surname,
+          address: 'info@talentosenior.uy',
+        },
+      ],
+      subject: 'Se ha registrado un nuevo talento',
+      html: `<p>Hola Equipo de Talento Senior, <br><br> <strong>${
+        person.name + ' ' + person.surname
+      }</strong> se acaba de registrar como <strong>talento</strong> en la web. <br><br> Muchas gracias.</p>`,
+    };
+    this.mailerService.sendEmail(dto2);
 
     return person;
   }
-  // @Post('email')
-  // async coso(): Promise<any> {
-  //   this.communicationService.sendEmail(
-  //     'helloramagago@gmail.com',
-  //     'peter',
-  //     'zunino',
-  //   );
-  // }
 
-  // @UseGuards(ApiKeyGuard)
+  @UseGuards(ApiKeyGuard)
   @Get()
   async findAll(
     @Query('search') search,
@@ -69,7 +78,6 @@ export class PersonController {
     @Query('ageMin') ageMin: number,
     @Query('ageMax') ageMax: number,
   ): Promise<{ data: Person[]; total: number }> {
-    // const sortOrderLow: string = sortOrder.toLowerCase();
     return this.personService.findAll({
       search,
       sortField,

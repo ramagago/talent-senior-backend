@@ -111,11 +111,22 @@ export class PersonService {
                   { company: { contains: search, mode: 'insensitive' } },
                   { role: { contains: search, mode: 'insensitive' } },
                   { workField: { contains: search, mode: 'insensitive' } },
-                  { skills: { contains: search, mode: 'insensitive' } },
                 ],
               },
             },
           },
+          // {
+          //   workExperiences: {
+          //     some: {
+          //       skills: {
+          //         some: {
+          //           contains: search,
+          //           mode: 'insensitive',
+          //         },
+          //       },
+          //     },
+          //   },
+          // },
         ],
       });
 
@@ -229,7 +240,19 @@ export class PersonService {
         findMany,
         count,
       ]);
-      return { data, total: totalCount };
+      // const filterData = search
+      //   ? data.filter((person) =>
+      //       person.workExperiences.some(
+      //         (workExperience) =>
+      //           Array.isArray(workExperience.skills) &&
+      //           workExperience.skills.some((skill) =>
+      //             skill.toLowerCase().includes(search.toLowerCase()),
+      //           ),
+      //       ),
+      //     )
+      //   : data;
+
+      return { data: data, total: totalCount };
     } catch (err) {
       this.logger.error(`Error in transaction: ${err.message}`);
       throw err;

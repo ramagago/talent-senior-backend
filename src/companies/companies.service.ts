@@ -29,6 +29,11 @@ export class CompaniesService {
           ? [
               { companyName: { contains: search, mode: 'insensitive' } },
               { howCanWeHelp: { contains: search, mode: 'insensitive' } },
+              { name: { contains: search, mode: 'insensitive' } },
+              { surname: { contains: search, mode: 'insensitive' } },
+              { companyEmail: { contains: search, mode: 'insensitive' } },
+              { companyWebsite: { contains: search, mode: 'insensitive' } },
+              { companyPhone: { contains: search, mode: 'insensitive' } },
             ]
           : undefined,
       },

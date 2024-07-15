@@ -17,7 +17,6 @@ export class MailerService {
         pass: this.configService.get<string>('MAIL_PASS'),
       },
     };
-    console.log(config);
     const transporter = nodemailer.createTransport(config);
     return transporter;
   }

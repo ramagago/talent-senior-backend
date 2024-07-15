@@ -25,7 +25,7 @@ export class CompaniesController {
   @Post()
   async create(@Body() companyData: Companies): Promise<any> {
     const company = await this.companiesService.create(companyData);
-    const dto: SendEmailDto = {
+    const dto1: SendEmailDto = {
       from: {
         name: 'Talento Senior',
         address: 'info@talentosenior.uy',
@@ -41,13 +41,33 @@ export class CompaniesController {
         company.name + ' ' + company.surname
       }</strong> su registro se ha realizado con éxito. <br><br> Muchas gracias.</p>`,
     };
-    this.mailerService.sendEmail(dto);
+    this.mailerService.sendEmail(dto1);
+    const dto2: SendEmailDto = {
+      from: {
+        name: 'Talento Senior',
+        address: 'info@talentosenior.uy',
+      },
+      recipients: [
+        {
+          name: company.name + ' ' + company.surname,
+          address: 'info@talentosenior.uy',
+        },
+      ],
+      subject: 'Se ha registrado una nueva empresa',
+      html: `<p>Hola Equipo de Talento Senior, <br><br> <strong>${
+        company.name + ' ' + company.surname
+      }</strong> acaba de registrar la empresa <strong> ${
+        company.companyName
+      }</strong>  en la web. <br><br> Muchas gracias.</p>`,
+    };
+    this.mailerService.sendEmail(dto2);
     return company;
   }
 
+  @UseGuards(ApiKeyGuard)
   @Get()
   async findAll(
-    @Query('search') search,
+    @Query('q') search,
     @Query('page') page: string = '1',
     @Query('perPage') perPage: string = '10',
   ): Promise<{ data: Companies[]; total: number }> {
